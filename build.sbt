@@ -26,7 +26,8 @@ lazy val commonSettings: Seq[Setting[_]] = Seq(
   description in ThisBuild := "Scala library for composing Druid queries",
   bintrayReleaseOnPublish in ThisBuild := false,
   developers in ThisBuild := List(
-    Developer("fokko", "Fokko Driesprong", "@fokkodriesprong", url("https://github.com/fokko"))
+    Developer("fokko", "Fokko Driesprong", "@fokkodriesprong", url("https://github.com/fokko")),
+    Developer("bjgbeelen", "Bas Beelen", "", url("https://github.com/bjgbeelen"))
   ),
   scmInfo in ThisBuild := Some(
     ScmInfo(
@@ -36,6 +37,7 @@ lazy val commonSettings: Seq[Setting[_]] = Seq(
   ),
   crossScalaVersions in ThisBuild := Seq("2.11.8", "2.12.3"),
   scalaVersion in ThisBuild := "2.12.3",
+  scalafmtOnCompile in ThisBuild := true,
   scalacOptions ++= Seq(Opts.compile.deprecation, "-Xlint", "-feature"),
   scalacOptions ++= PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
     case Some((2, v)) if v >= 11 => unusedWarnings

@@ -24,7 +24,6 @@ import akka.stream.ActorMaterializer
 import akka.util.ByteString
 import ing.wbaa.druid.definitions.{Aggregation, Filter}
 import ing.wbaa.druid.query.DruidQuery
-import org.json4s.FieldSerializer._
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
 import org.json4s.jackson.Serialization
@@ -41,10 +40,7 @@ object DruidClient {
   import scala.concurrent.ExecutionContext.Implicits.global
 
   implicit val formats: Formats = Serialization.formats(NoTypeHints).preservingEmptyValues +
-    FieldSerializer[Aggregation]() + FieldSerializer[Filter](
-    renameTo("kind", "type"),
-    renameFrom("type", "kind")
-  ) + FieldSerializer[DruidQuery[_]]() + json.AggregationTypeSerializer
+    FieldSerializer[Aggregation]() + FieldSerializer[Filter]() + FieldSerializer[DruidQuery[_]]() + json.AggregationTypeSerializer + json.FilterTypeSerializer
 
   /**
     * Execute the query by performing a POST request to the Druid broker

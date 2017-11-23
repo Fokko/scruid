@@ -229,8 +229,8 @@ class DruidTest extends FunSuiteLike with Inside with OptionValues {
     //  "dataSource": "wikiticker"
     //  }
 
-    val filterUnitedStates = FilterSelect(dimension = "countryName", value = "United States")
-    val filterBoth = filterUnitedStates || FilterSelect(dimension = "countryName", value = "Italy") && FilterEmpty
+    val filterUnitedStates = SelectFilter(dimension = "countryName", value = "United States")
+    val filterBoth = filterUnitedStates || SelectFilter(dimension = "countryName", value = "Italy")
 
     val resultFuture = TopNQuery[TopCountry](
       dimension = Dimension(
@@ -261,18 +261,6 @@ class DruidTest extends FunSuiteLike with Inside with OptionValues {
 
     assert(result(1).count === 256)
     assert(result(1).countryName === "Italy")
-
-
-    // Test the filter composition
-
-    val actualFilter = FilterSelect(dimension = "countryName", value = "United States")
-
-    assert((FilterEmpty && actualFilter) == actualFilter)
-    assert((actualFilter && FilterEmpty) == actualFilter)
-
-    // Should give an Empty filter
-    assert((FilterEmpty && FilterEmpty) == FilterEmpty)
-
   }
 
 }

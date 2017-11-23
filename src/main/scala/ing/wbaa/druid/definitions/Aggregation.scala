@@ -15,15 +15,13 @@
  * limitations under the License.
  */
 
-package ing.wbaa.druid.definitions
+package ing.wbaa.druid
+package definitions
+
+import utils.StringUtils
 
 sealed trait AggregationType {
-  private def decapitalize(input: String) = {
-    val chars = input.toCharArray
-    chars(0) = Character.toLowerCase(chars(0))
-    chars.mkString
-  }
-  lazy val value: String = decapitalize(this.getClass.getSimpleName.replace("$", ""))
+  lazy val value: String = StringUtils.decapitalize(this.getClass.getSimpleName.replace("$", ""))
 }
 object AggregationType {
   case object Count extends AggregationType
