@@ -37,7 +37,6 @@ lazy val commonSettings: Seq[Setting[_]] = Seq(
   ),
   crossScalaVersions in ThisBuild := Seq("2.11.8", "2.12.3"),
   scalaVersion in ThisBuild := "2.12.3",
-  scalafmtOnCompile in ThisBuild := true,
   scalacOptions ++= Seq(Opts.compile.deprecation, "-Xlint", "-feature"),
   scalacOptions ++= PartialFunction.condOpt(CrossVersion.partialVersion(scalaVersion.value)) {
     case Some((2, v)) if v >= 11 => unusedWarnings
