@@ -422,27 +422,21 @@ object DruidAdvancedHttpClient extends DruidClientBuilder {
           // consider any response with HTTP Code different from StatusCodes.OK as a failure
           case (triedResponse, responsePromise) =>
             triedResponse match {
-              case Success(response) if response.status != StatusCodes.OK =>
+              case Success(response) if response.status != StatusCodes.OK => {
                 response.entity
                   .toStrict(responseParsingTimeout)
-                  .map {
-                    // Future.success(entity) => Future.success(Try.success(entity))
-                    Success(_)
-                  }
-                  .recover {
-                    // Future.failure(throwable) => Future.success(Try.failure(throwable))
-                    case t: Throwable => Failure(t)
-                  }
-                  .map { entity =>
-                    // Future.success(Try(entity|throwable)) => Future.success(failure(HSE(try)), promise)
+                  .map(entity => {
                     val failure = Failure(
-                      new HttpStatusException(response.status,
-                                              response.protocol,
-                                              response.headers,
-                                              entity)
+                      new HttpStatusException(
+                        response.status,
+                        response.protocol,
+                        response.headers,
+                        Try(entity)
+                      )
                     )
                     (failure, responsePromise)
-                  }
+                  })
+              }
               case _ => Future.successful((triedResponse, responsePromise))
             }
         }
